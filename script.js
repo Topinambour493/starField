@@ -4,10 +4,26 @@ let LINE_COUNT = 40000;
 let geom = new THREE.BufferGeometry();
 geom.setAttribute("position", new THREE.BufferAttribute(new Float32Array(6*LINE_COUNT), 3));
 geom.setAttribute("velocity", new THREE.BufferAttribute(new Float32Array(2*LINE_COUNT), 1));
+geom.setAttribute("color", new THREE.BufferAttribute(new Float32Array(3*LINE_COUNT), 3));
+
 let pos = geom.getAttribute("position");
 let pa = pos.array;
 let vel = geom.getAttribute("velocity");
 let va = vel.array;
+let col = geom.getAttribute("color");
+let co = col.array;
+
+let colors = [
+    [0,1,0],
+    [1,0,0],
+    [0,0,1]
+]
+let gradient= false;
+
+
+function attributeColor(n){
+    return colors[n%colors.length]
+}
 
 function init() {
     scene = new THREE.Scene();
@@ -18,7 +34,20 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    if (gradient === false){
+        let new_colors = []
+        for ( let i=0; i < colors.length; i++){
+            new_colors.push(colors[i], colors[i]);
+        }
+        colors = new_colors
+    }
+
     for (let line_index= 0; line_index < LINE_COUNT; line_index++) {
+        color = attributeColor(line_index)
+        co[3*line_index] = color[0];
+        co[3*line_index+1] = color[1];
+        co[3*line_index+2] = color[2];
+
         var x = Math.random() * 400 - 200;
         var y = Math.random() * 200 - 100;
         var z = Math.random() * 500 - 100;
@@ -37,7 +66,7 @@ function init() {
         va[2*line_index] = va[2*line_index+1]= 0;
     }
     //debugger;
-    let mat = new THREE.LineBasicMaterial({color: 0xffffff});
+    let mat = new THREE.LineBasicMaterial({vertexColors: true});
     let lines = new THREE.LineSegments(geom, mat);
     scene.add(lines);
 
