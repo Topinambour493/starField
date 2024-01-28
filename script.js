@@ -18,11 +18,24 @@ let colors = [
     [1,0,0],
     [0,0,1]
 ]
-let gradient= false;
+let gradient= true;
+let colorRandom = true;
+let actuallyColorRandom;
+let counterColor = 1
 
 
 function attributeColor(n){
-    return colors[n%colors.length]
+    if (colorRandom && gradient === false){
+        if (counterColor===1){
+            actuallyColorRandom = [Math.random(),Math.random(),Math.random()]
+        }
+        counterColor *= -1
+        return actuallyColorRandom
+    } if (colorRandom && gradient === true) {
+        return [Math.random(),Math.random(),Math.random()]
+    }
+    else
+        return colors[n%colors.length]
 }
 
 function init() {
