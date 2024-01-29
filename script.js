@@ -23,6 +23,7 @@ let colorRandom = true;
 let actuallyColorRandom;
 let counterColor = 1
 
+let rotate = true;
 
 function attributeColor(n){
     if (colorRandom && gradient === false){
@@ -110,6 +111,9 @@ function animate() {
             va[2*line_index] = 0;
             va[2*line_index+1] = 0;
         }
+    }
+    if (rotate){
+        geom.rotateZ(0.006);
     }
     pos.needsUpdate = true;
     renderer.render(scene,camera);
